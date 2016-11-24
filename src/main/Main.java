@@ -74,13 +74,19 @@ public class Main {
 	}
 	
 	public static void main (String[] args){
-		TuringMachine tur = new TuringMachine("c1abcabaabccbcaababababaaaaabacccabababbabbbbababaaaaaccccc");
+		TuringMachine tur = new TuringMachine();
 		
-		addInstructions(tur);
+		tur.addInstructionsFromFile("instructions.txt");
+		tur.addFinalStatesFromFile("final_states.txt");
+		tur.setStartTapeFromFile("start_tape.txt");
+		
+		//addInstructions(tur);
 		tur.run();
+		tur.writeOutputToFile("output.txt");
+		tur.writeLogToFile("log.txt");
 		
-		System.out.println(tur.getAccepted());
-		System.out.println(tur.getTape());
+		//System.out.println(tur.getAccepted());
+		//System.out.println(tur.getTape());
 	}
 	
 }

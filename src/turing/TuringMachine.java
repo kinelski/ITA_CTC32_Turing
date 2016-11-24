@@ -20,15 +20,32 @@ public class TuringMachine {
 	private Tape tape;
 	private List<Instruction> instructions;
 	private Set<Integer> finalStates;
+	private StringBuilder log;
+	
+	// CONSTRUTORES=======================================================================
+	public TuringMachine(){
+		reset();
+	}
 	
 	public TuringMachine (String startTape){
+		reset();
+		setStartTape(startTape);
+	}
+	
+	// METODOS PARA CONSTRUIR A MT=======================================================
+	public void reset(){
 		accepted = false;
 		stopped = false;
 		state = 0;
 		
-		tape = new Tape(startTape);
+		tape = new Tape();
 		instructions = new ArrayList<Instruction>();
 		finalStates = new TreeSet<Integer>();
+		log = new StringBuilder();
+	}
+	
+	public void setStartTape (String startTape){
+		tape = new Tape(startTape);
 	}
 	
 	public void addInstruction (int startState, char readSymbol, int finalState, char writeSymbol, Move move){
@@ -46,23 +63,31 @@ public class TuringMachine {
 		instructions.add(inst);
 	}
 	
+	// METODOS PARA CONSTRUIR A MT POR MEIO DE ARQUIVOS TXT==============================
+	public void addInstructionsFromFile (String path){
+		FileManager.readInstructionsFromFile(this, path);
+	}
+	
+	public void addFinalStatesFromFile (String path){
+		FileManager.readFinalStatesFromFile(this, path);
+	}
+	
+	public void setStartTapeFromFile (String path){
+		FileManager.readStartTapeFromFile(this, path);
+	}
+	
 	public void addFinalState (int state){
 		finalStates.add(state);
 	}
 	
+	// METODOS DE OPERACAO DA MT=========================================================
 	public void run(){
-		while (!stopped)
+		while (!stopped){
+			updateLog();
 			clock();
+		}
 		
 		accepted = finalStates.contains(state);
-	}
-	
-	public String getTape(){
-		return tape.getTape();
-	}
-	
-	public boolean getAccepted(){
-		return accepted;
 	}
 	
 	private void clock(){
@@ -83,6 +108,32 @@ public class TuringMachine {
 		}
 		
 		stopped = true;
+	}
+	
+	private void updateLog(){
+		log.append(tape.getTapeWithIndex() + " (State: " + state + ")\r\n");
+	}
+	
+	// METODOS PARA OBTER O RESULTADO====================================================
+	public String getLog(){
+		return log.toString();
+	}
+	
+	public String getTape(){
+		return tape.getTape();
+	}
+	
+	public boolean getAccepted(){
+		return accepted;
+	}
+	
+	// METODOS PARA ESCREVER O RESULTADO EM ARQUIVOS TXT=================================
+	public void writeOutputToFile (String path){
+		FileManager.writeOutputToFile(this, path);
+	}
+	
+	public void writeLogToFile (String path){
+		FileManager.writeLogToFile(log.toString(), path);
 	}
 
 }
