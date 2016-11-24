@@ -63,6 +63,10 @@ public class TuringMachine {
 		instructions.add(inst);
 	}
 	
+	public void addFinalState (int state){
+		finalStates.add(state);
+	}
+	
 	// METODOS PARA CONSTRUIR A MT POR MEIO DE ARQUIVOS TXT==============================
 	public void addInstructionsFromFile (String path){
 		FileManager.readInstructionsFromFile(this, path);
@@ -74,10 +78,6 @@ public class TuringMachine {
 	
 	public void setStartTapeFromFile (String path){
 		FileManager.readStartTapeFromFile(this, path);
-	}
-	
-	public void addFinalState (int state){
-		finalStates.add(state);
 	}
 	
 	// METODOS DE OPERACAO DA MT=========================================================
